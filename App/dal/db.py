@@ -3,6 +3,7 @@ from config import DB_CONFIG
 
 def get_connection():
     return mysql.connector.connect(**DB_CONFIG)
+
 def insert_data(data):
     conn = get_connection()
     cursor = conn.cursor()
@@ -35,6 +36,3 @@ def get_all_products():
     cursor.close()
     conn.close()
     return results
-
-
-
