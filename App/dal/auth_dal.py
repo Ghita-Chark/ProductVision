@@ -20,3 +20,22 @@ def get_user_by_username(username):
     cursor.close()
     conn.close()
     return user
+
+def create_user(username, password, role='user'):
+    """Crée un nouvel utilisateur avec un mot de passe en texte brut (non haché)."""
+    conn = get_connection()
+    cursor = conn.cursor()
+    
+    print(f"Création d'un utilisateur: {username}, Rôle: {role}, Mot de passe: {password}")
+    
+    try:
+        cursor.execute("INSERT INTO users (username, password, role) VALUES (%s, %s, %s)", 
+                      (username, password, role))
+        conn.commit()
+        print(f"Utilisateur créé avec succès: {username}")
+    except Exception as e:
+        print(f"Erreur lors de la création de l'utilisateur: {e}")
+        raise e
+    finally:
+        cursor.close()
+        conn.close()
