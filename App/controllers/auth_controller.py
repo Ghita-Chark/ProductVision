@@ -44,6 +44,33 @@ def login():
 
     return render_template('login.html')
 
+@auth.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        print(f"Tentative d'inscription - Nom d'utilisateur: {username}, Mot de passe: {password}")
+        
+        try:
+            register_user(username, password, role='user')
+            print(f"Inscription réussie pour: {username}")
+            flash("Inscription réussie")
+            return redirect(url_for('auth.login'))
+        except Exception as e:
+            print(f"Erreur lors de l'inscription: {e}")
+            flash("Erreur : Nom d'utilisateur déjà pris ")
+
+    return render_template('auth.html')
+
+@auth.route('/logout')
+def logout():
+    if 'username' in session:
+        print(f"Déconnexion de l'utilisateur: {session['username']}")
+    session.clear()
+    flash("Déconnexion réussie ")
+    return redirect(url_for('auth.login'))
+
 
 
 
