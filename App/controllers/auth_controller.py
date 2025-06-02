@@ -21,8 +21,11 @@ def admin_required(f):
     def decorated_function(*args, **kwargs):
         if 'user_id' not in session or session.get('role') != 'admin':
             flash("Accès refusé : Vous devez être administrateur pour accéder à cette page ❌")
+            print("test")
             return redirect(url_for('auth.login'))
         return f(*args, **kwargs)
     return decorated_function
+
+
 
 
