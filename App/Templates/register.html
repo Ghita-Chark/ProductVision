@@ -74,6 +74,21 @@
                 </div>
                 <img src="{{ url_for('static', filename='img/log.png') }}" class="image" alt="Illustration connexion">
             </div>
+              <div class="panel right-panel">
+                <div class="content">
+                    <h3>Déjà membre ?</h3>
+                    <p>
+                        Connectez-vous pour accéder à votre compte et gérer vos données.
+                    </p>
+                    <button class="btn transparent" id="sign-in-btn">
+                        Se connecter
+                    </button>
+                </div>
+                <img src="{{ url_for('static', filename='img/register.png') }}" class="image" alt="Illustration inscription">
+            </div>
+        </div>
+    </div>
+
           
     <script src="{{ url_for('static', filename='js/auth-app.js') }}"></script>
 </body>
