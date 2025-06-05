@@ -26,3 +26,49 @@ document.addEventListener("DOMContentLoaded", function() {
       });
     }
   });
+
+  let list = document.querySelectorAll(".navigation li");
+  
+  function activeLink() {
+    list.forEach((item) => {
+      item.classList.remove("hovered");
+    });
+    this.classList.add("hovered");
+  }
+  
+  list.forEach((item) => item.addEventListener("mouseover", activeLink));
+  
+
+  let toggle = document.querySelector(".toggle");
+  let navigation = document.querySelector(".navigation");
+  let main = document.querySelector(".main");
+  
+  if (toggle) {
+    toggle.onclick = function () {
+      navigation.classList.toggle("active");
+      main.classList.toggle("active");
+    };
+  }
+  
+  // Tab functionality
+  function showTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+    document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+    
+    const tabElement = document.getElementById(tabId);
+    if (tabElement) {
+      tabElement.classList.add('active');
+      document.querySelector(`button[onclick="showTab('${tabId}')"]`).classList.add('active');
+    }
+  }
+  
+  // File input display
+  const fileInput = document.getElementById('csv-file');
+  if (fileInput) {
+    fileInput.addEventListener('change', function(e) {
+      const fileName = document.getElementById('file-name');
+      if (fileName) {
+        fileName.textContent = this.files[0].name;
+      }
+    });
+  }
