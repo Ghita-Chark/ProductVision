@@ -172,7 +172,7 @@ def modifier_produit(id):
         record_admin_action("modification", request.form['item_description'])
         cursor.close()
         conn.close()
-        flash("Produit modifié ✅ ")
+        flash("Produit modifié! ")
         return redirect('/admin')
 
     cursor.execute("SELECT * FROM produits WHERE id=%s", (id,))
