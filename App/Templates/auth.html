@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth-style.css') }}">
+    <title>Authentification | Votre Application</title>
+</head>
+<body>
+    <div class="container {% if request.path == url_for('auth.register') %}sign-up-mode{% endif %}">
+        <div class="forms-container">
+            <div class="signin-signup">
+                <form action="{{ url_for('auth.login') }}?next=/import_csv" method="POST" class="sign-in-form">
+                    <h2 class="title">Connexion</h2>
+                    
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="flash-message {% if '❌' in message %}flash-error{% else %}flash-success{% endif %}">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                    
+                    <div class="input-field">
+                        <i class="fas fa-user"></i>
+                        <input type="text" name="username" id="username" placeholder="Nom d'utilisateur" required>
+                    </div>
+                    <div class="input-field">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" name="password" id="password" placeholder="Mot de passe" required>
+                    </div>
+                    <input type="submit" value="Se connecter" class="btn solid">
+                </form>
+                
+
+    <script src="{{ url_for('static', filename='js/auth-app.js') }}"></script>
+</body>
+</html>
