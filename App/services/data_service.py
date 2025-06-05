@@ -1,5 +1,5 @@
 import pandas as pd
-from app.dal.db import insert_data, get_all_products, get_connection
+from App.dal.db import insert_data, get_all_products, get_connection
 
 
 def process_csv(file_path):
