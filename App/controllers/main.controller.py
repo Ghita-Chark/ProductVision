@@ -141,3 +141,101 @@ def ajouter_produit():
         return redirect('/admin')
 
     return render_template('admin_add_product.html')
+
+
+@main.route('/admin/modifier/<int:id>', methods=['GET', 'POST'])
+@admin_required
+def modifier_produit(id):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    if request.method == 'POST':
+        data = (
+            request.form['from_date'],
+            request.form['department'],
+            int(request.form['section']),
+            int(request.form['barcode']),
+            int(request.form['item_num']),
+            request.form['item_description'],
+            float(request.form['purchase_price']),
+            float(request.form['selling_price']),
+            float(request.form['quantity']),
+            id
+        )
+        cursor.execute("""
+            UPDATE produits SET 
+            from_date=%s, department=%s, section=%s, barcode=%s, item_num=%s,
+            item_description=%s, purchase_price=%s, selling_price=%s, quantity=%s
+            WHERE id=%s
+        """, data)
+        conn.commit()
+        record_admin_action("modification", request.form['item_description'])
+        cursor.close()
+        conn.close()
+        flash("Produit modifié ✅ ")
+        return redirect('/admin')
+
+    cursor.execute("SELECT * FROM produits WHERE id=%s", (id,))
+    produit = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    return render_template('admin_edit_product.html', produit=produit)
+
+@main.route('/admin/supprimer/<int:id>')
+@admin_required
+def supprimer_produit(id):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT item_description FROM produits WHERE id=%s", (id,))
+    result = cursor.fetchone()
+    product_name = result[0] if result else "Inconnu"
+
+    cursor.execute("DELETE FROM produits WHERE id=%s", (id,))
+    conn.commit()
+
+    record_admin_action("suppression", product_name)
+
+    cursor.close()
+    conn.close()
+    flash("Produit supprimé avec succès!")
+    return redirect('/admin')
+
+@main.route('/export/produits')
+@admin_required
+def export_produits():
+    produits = get_all_products()
+    df = pd.DataFrame(produits)
+    output = BytesIO()
+    df.to_excel(output, index=False)
+    output.seek(0)
+    return send_file(output, download_name="produits.xlsx", as_attachment=True)
+
+@main.route('/export/historique')
+@admin_required
+def export_historique():
+    historique = get_admin_action_history()
+    df = pd.DataFrame(historique)
+    output = BytesIO()
+    df.to_excel(output, index=False)
+    output.seek(0)
+    return send_file(output, download_name="historique_admin.xlsx", as_attachment=True)
+
+@main.route('/import_csv', methods=['GET', 'POST'])
+@login_required
+def import_csv():
+    if request.method == 'POST':
+        file = request.files['csv_file']
+        if file:
+            filepath = os.path.join(UPLOAD_FOLDER, file.filename)
+            os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+            file.save(filepath)
+            process_csv(filepath)
+            flash("Fichier CSV importé avec succès !!")
+            if session.get('role') == 'admin':
+                return redirect(url_for('main.admin_dashboard'))  
+                return redirect(url_for('main.show_products')) 
+        else:
+            flash("Veuillez sélectionner un fichier CSV!!")
+
+    return render_template('import_csv.html')  
