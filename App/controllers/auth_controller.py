@@ -40,7 +40,7 @@ def login():
             return redirect(url_for('main.import_csv'))  
         else:
             print(f"Échec d'authentification pour: {username}")
-            flash("Nom d'utilisateur ou mot de passe incorrect ❌")
+            flash("Nom d'utilisateur ou mot de passe incorrect!!")
 
     return render_template('login.html')
 
