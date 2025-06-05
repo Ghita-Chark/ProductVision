@@ -216,3 +216,81 @@ form.sign-in-form {
   font-size: 0.95rem;
   padding: 0.7rem 0;
 }
+
+.btn.transparent {
+  margin: 0;
+  background: none;
+  border: 2px solid #fff;
+  width: 130px;
+  height: 41px;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.right-panel .image,
+.right-panel .content {
+  transform: translateX(800px);
+}
+
+/* ANIMATION */
+
+.container.sign-up-mode:before {
+  transform: translate(100%, -50%);
+  right: 52%;
+}
+
+.container.sign-up-mode .left-panel .image,
+.container.sign-up-mode .left-panel .content {
+  transform: translateX(-800px);
+}
+
+.container.sign-up-mode .signin-signup {
+  left: 25%;
+}
+
+.container.sign-up-mode form.sign-up-form {
+  opacity: 1;
+  z-index: 2;
+}
+
+.container.sign-up-mode form.sign-in-form {
+  opacity: 0;
+  z-index: 1;
+}
+
+.container.sign-up-mode .right-panel .image,
+.container.sign-up-mode .right-panel .content {
+  transform: translateX(0%);
+}
+
+.container.sign-up-mode .left-panel {
+  pointer-events: none;
+}
+
+.container.sign-up-mode .right-panel {
+  pointer-events: all;
+}
+
+.flash-message {
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  text-align: center;
+  font-weight: 500;
+  max-width: 380px;
+  width: 100%;
+}
+
+.flash-error {
+  background-color: #ffe6e6;
+  color: #ff3333;
+  border: 1px solid #ffcccc;
+}
+
+.flash-success {
+  background-color: #e6ffe6;
+  color: #33cc33;
+  border: 1px solid #ccffcc;
+}
+
+
