@@ -168,7 +168,7 @@ def get_admin_action_history(limit=10):
     return actions
 
 
-from app.dal.db import get_connection
+from App.dal.db import get_connection
 
 def record_admin_action(action_type, product_name):
     conn = get_connection()

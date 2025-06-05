@@ -1,4 +1,4 @@
-from app.dal.db import get_connection
+from App.dal.db import get_connection
 
 def get_user_by_username(username):
     """Récupère un utilisateur par son nom d'utilisateur."""
