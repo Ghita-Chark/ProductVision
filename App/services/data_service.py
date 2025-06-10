@@ -182,6 +182,16 @@ def record_admin_action(action_type, product_name):
     conn.close()
     print(f"Action enregistrée : {action_type}, produit : {product_name}")
 
+def record_admin_action(action_type, product_name):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        INSERT INTO admin_actions (action_type, product_name)
+        VALUES (%s, %s)
+    """, (action_type, product_name))
+    conn.commit()
+    cursor.close()
+
 
 
 
