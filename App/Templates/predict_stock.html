@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>📊 Prédiction du stock futur</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/predict_stock.css') }}">
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</head>
+<body>
+  <div class="container">
+    <!-- Barre latérale -->
+    <div class="navigation">
+      <ul>
+        <li><a href="#"><span class="icon"><ion-icon name="storefront-outline"></ion-icon></span><span class="title">Gestion Stock</span></a></li>
+        <li><a href="/admin"><span class="icon"><ion-icon name="home-outline"></ion-icon></span><span class="title">Tableau de bord</span></a></li>
+        <li><a href="/stock"><span class="icon"><ion-icon name="layers-outline"></ion-icon></span><span class="title">Stock</span></a></li>
+        <li><a href="/statistiques"><span class="icon"><ion-icon name="bar-chart-outline"></ion-icon></span><span class="title">Statistiques</span></a></li>
+        
+        <li><a href="/assistant"><span class="icon"><ion-icon name="chatbubbles-outline"></ion-icon></span><span class="title">Assistant IA</span></a></li>
+        <li><a href="/prediction" class="hovered"><span class="icon"><ion-icon name="trending-up-outline"></ion-icon></span><span class="title">Prédiction</span></a></li>
+        <li><a href="/alertes" class="active"><span class="icon"><ion-icon name="warning-outline"></ion-icon></span><span class="title">Alertes</span></a></li>
+        <li>
+                    <a href="/admin/ajouter">
+                        <span class="icon">
+                            <ion-icon name="add-circle-outline"></ion-icon>
+                        </span>
+                        <span class="title">Ajouter Produit</span>
+                    </a>
+                </li>
+        <li><a href="/logout"><span class="icon"><ion-icon name="log-out-outline"></ion-icon></span><span class="title">Déconnexion</span></a></li>
+      </ul>
+    </div>
+
+    <!-- Contenu principal -->
+    <div class="main">
+      <div class="form-section">
+        <h1>📈 Prédiction du stock futur</h1>
+        <form method="POST">
+          <label for="produit">Choisissez un produit :</label>
+          <select name="produit" id="produit" required>
+            <option value="">-- Sélectionner --</option>
+            {% for produit in produits %}
+              <option value="{{ produit }}">{{ produit }}</option>
+            {% endfor %}
+          </select>
+          <button type="submit">Prédire</button>
+        </form>
+      </div>
+
+      <div class="result-section">
+        <h2>📊 Résultat de la prédiction</h2>
+        {% if plot_div %}
+          <div id="plot">{{ plot_div | safe }}</div>
+        {% else %}
+          <p>Veuillez sélectionner un produit pour afficher les prédictions.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</body>
+</html>
