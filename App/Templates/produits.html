@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des Produits</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/produit.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="navigation">
+            <ul>
+                <li>
+                    <a href="#">
+                        <span class="icon">
+                            <ion-icon name="storefront-outline"></ion-icon>
+                        </span>
+                        <span class="title">Gestion Stock</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/">
+                        <span class="icon">
+                            <ion-icon name="home-outline"></ion-icon>
+                        </span>
+                        <span class="title">Accueil</span>
+                    </a>
+                </li>
+
+                <li class="hovered">
+                    <a href="/produits">
+                        <span class="icon">
+                            <ion-icon name="cube-outline"></ion-icon>
+                        </span>
+                        <span class="title">Produits</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/admin">
+                        <span class="icon">
+                            <ion-icon name="settings-outline"></ion-icon>
+                        </span>
+                        <span class="title">Administration</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="main">
+            <div class="topbar">
+                <div class="toggle">
+                    <ion-icon name="menu-outline"></ion-icon>
+                </div>
+
+                <div class="search">
+                    <label>
+                        <input type="text" placeholder="Rechercher un produit..." id="search">
+                        <ion-icon name="search-outline"></ion-icon>
+                    </label>
+                </div>
+            </div>
+
+            <!-- KPI Cards -->
+            <div class="cardBox">
+                <div class="card">
+                    <div>
+                        <div class="numbers">{{ kpis.total_produits }}</div>
+                        <div class="cardName">Total Produits</div>
+                    </div>
+                    <div class="iconBx">
+                        <ion-icon name="cube-outline"></ion-icon>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div>
+                        <div class="numbers">{{ kpis.stock_total }}</div>
+                        <div class="cardName">Stock Global</div>
+                    </div>
+                    <div class="iconBx">
+                        <ion-icon name="layers-outline"></ion-icon>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div>
+                        <div class="numbers">{{ kpis.prix_moyen_vente | round(2) }}</div>
+                        <div class="cardName">Prix Moyen (MAD)</div>
+                    </div>
+                    <div class="iconBx">
+                        <ion-icon name="cash-outline"></ion-icon>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div>
+                        <div class="numbers">{{ kpis.produits_en_rupture }}</div>
+                        <div class="cardName">Rupture de Stock</div>
+                    </div>
+                    <div class="iconBx">
+                        <ion-icon name="alert-circle-outline"></ion-icon>
+                    </div>
+                </div>
+            </div>
+
+            <div class="details">
+                <div class="recentOrders">
+                    <div class="cardHeader">
+                        <h2>Liste des Produits</h2>
+                    </div>
+
+                    <table id="productsTable">
+                        <thead>
+                            <tr>
+                                <td>ID</td>
+                                <td>Date</td>
+                                <td>Département</td>
+                                <td>Section</td>
+                                <td>Code-barres</td>
+                                <td>Nom</td>
+                                <td>Achat</td>
+                                <td>Vente</td>
+                                <td>Quantité</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for p in produits %}
+                            <tr>
+                                <td>{{ p.id }}</td>
+                                <td>{{ p.from_date }}</td>
+                                <td>{{ p.department }}</td>
+                                <td>{{ p.section }}</td>
+                                <td>{{ p.barcode }}</td>
+                                <td>{{ p.item_description }}</td>
+                                <td>{{ p.purchase_price }}</td>
+                                <td>{{ p.selling_price }}</td>
+                                <td>
+                                    {{ p.quantity }}
+                                    
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('search');
+            searchInput.addEventListener('keyup', function() {
+                const value = this.value.toLowerCase();
+                const rows = document.querySelectorAll('#productsTable tbody tr');
+                
+                rows.forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    row.style.display = text.includes(value) ? '' : 'none';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

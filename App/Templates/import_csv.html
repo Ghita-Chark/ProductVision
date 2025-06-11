@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Import Hub - Gestion de Stock</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/import_csv.css') }}">
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Header -->
+    <header class="dashboard-header">
+      <div class="header-content">
+        <div class="header-brand">
+          <div class="brand-icon">
+            <ion-icon name="analytics-outline"></ion-icon>
+          </div>
+          <div class="brand-text">
+            <h1>Data Import Hub</h1>
+            <p>Plateforme d'importation et d'analyse de données</p>
+          </div>
+        </div>
+        <div class="header-stats">
+          <div class="stat-item">
+            <div class="stat-value">1,247</div>
+            <div class="stat-label">Fichiers traités</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">98.5%</div>
+            <div class="stat-label">Taux de succès</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">2.3s</div>
+            <div class="stat-label">Temps moyen</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="dashboard-main">
+      <!-- Import Panel -->
+      <section class="import-panel">
+        <div class="panel-header">
+          <div class="upload-icon">
+            <ion-icon name="cloud-upload-outline"></ion-icon>
+          </div>
+          <h1 class="panel-title">Importation de Données CSV</h1>
+          <p class="panel-subtitle">Glissez-déposez votre fichier CSV ou cliquez pour sélectionner. Notre système analysera automatiquement la structure et validera les données.</p>
+        </div>
+
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class="flash {{ 'error' if '❌' in messages[0] else 'success' }}">
+              <ion-icon name="{{ 'close-circle-outline' if '❌' in messages[0] else 'checkmark-circle-outline' }}"></ion-icon>
+              {{ messages[0] }}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <form method="POST" enctype="multipart/form-data" action="{{ url_for('main.import_csv') }}" class="upload-form">
+          <div class="upload-area" id="uploadArea">
+            <div class="upload-content">
+              <ion-icon name="cloud-upload-outline"></ion-icon>
+              <h3>Glissez-déposez votre fichier CSV ici</h3>
+              <p>ou cliquez pour parcourir vos fichiers</p>
+              <div class="file-types">
+                <ion-icon name="document-outline"></ion-icon>
+                Formats acceptés: .csv (max 50MB)
+              </div>
+            </div>
+            <input type="file" name="csv_file" required accept=".csv" class="file-input" id="fileInput">
+          </div>
+
+          <div class="file-preview" id="filePreview">
+            <div class="file-info">
+              <div class="file-icon">
+                <ion-icon name="document-text-outline"></ion-icon>
+              </div>
+              <div class="file-details">
+                <h4 id="fileName">nom_fichier.csv</h4>
+                <div class="file-meta">
+                  <span id="fileSize">2.5 MB</span>
+                  <span>•</span>
+                  <span id="fileRows">~1,250 lignes</span>
+                  <span>•</span>
+                  <span id="fileDate">Aujourd'hui</span>
+                </div>
+              </div>
+              <button type="button" class="remove-file" id="removeFile">
+                <ion-icon name="close-outline"></ion-icon>
+              </button>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="file-actions">
+              <div class="file-status">
+                <ion-icon name="checkmark-circle-outline"></ion-icon>
+                Fichier validé et prêt à importer
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-submit" id="submitBtn">
+            <ion-icon name="arrow-up-circle-outline"></ion-icon>
+            <span>Analyser et Importer</span>
+          </button>
+        </form>
+      </section>
+
+      <!-- Analytics Panel -->
+      <aside class="analytics-panel">
+        <!-- Import Statistics -->
+        <div class="analytics-card">
+          <div class="card-header">
+            <h3 class="card-title">
+              <ion-icon name="bar-chart-outline"></ion-icon>
+              Statistiques d'Import
+            </h3>
+          </div>
+          <div class="card-content">
+            <div class="import-stats">
+              <div class="stat-card">
+                <div class="stat-number">156</div>
+                <div class="stat-text">Aujourd'hui</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number">3,247</div>
+                <div class="stat-text">Ce mois</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number">45.2GB</div>
+                <div class="stat-text">Données traitées</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number">99.1%</div>
+                <div class="stat-text">Qualité moyenne</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Imports -->
+        <div class="analytics-card">
+          <div class="card-header">
+            <h3 class="card-title">
+              <ion-icon name="time-outline"></ion-icon>
+              Imports Récents
+            </h3>
+          </div>
+          <div class="card-content">
+            <div class="recent-imports">
+              <div class="import-item">
+                <div class="import-icon">
+                  <ion-icon name="checkmark-outline"></ion-icon>
+                </div>
+                <div class="import-details">
+                  <div class="import-name">inventaire_q4_2023.csv</div>
+                  <div class="import-meta">Il y a 2 heures • 1,247 lignes</div>
+                </div>
+                <div class="import-status">Succès</div>
+              </div>
+              <div class="import-item">
+                <div class="import-icon">
+                  <ion-icon name="checkmark-outline"></ion-icon>
+                </div>
+                <div class="import-details">
+                  <div class="import-name">produits_nouveaux.csv</div>
+                  <div class="import-meta">Hier • 892 lignes</div>
+                </div>
+                <div class="import-status">Succès</div>
+              </div>
+              <div class="import-item">
+                <div class="import-icon">
+                  <ion-icon name="checkmark-outline"></ion-icon>
+                </div>
+                <div class="import-details">
+                  <div class="import-name">stock_update.csv</div>
+                  <div class="import-meta">Il y a 2 jours • 2,156 lignes</div>
+                </div>
+                <div class="import-status">Succès</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Data Validation Rules -->
+        <div class="analytics-card">
+          <div class="card-header">
+            <h3 class="card-title">
+              <ion-icon name="shield-checkmark-outline"></ion-icon>
+              Règles de Validation
+            </h3>
+          </div>
+          <div class="card-content">
+            <div class="validation-rules">
+              <div class="validation-rule">
+                <div class="rule-icon">
+                  <ion-icon name="checkmark-outline"></ion-icon>
+                </div>
+                <div class="rule-text">Format CSV avec séparateur virgule</div>
+              </div>
+              <div class="validation-rule">
+                <div class="rule-icon">
+                  <ion-icon name="checkmark-outline"></ion-icon>
+                </div>
+                <div class="rule-text">Encodage UTF-8 requis</div>
+              </div>
+              <div class="validation-rule">
+                <div class="rule-icon">
+                  <ion-icon name="checkmark-outline"></ion-icon>
+                </div>
+                <div class="rule-text">En-têtes de colonnes obligatoires</div>
+              </div>
+              <div class="validation-rule">
+                <div class="rule-icon">
+                  <ion-icon name="checkmark-outline"></ion-icon>
+                </div>
+                <div class="rule-text">Validation automatique des types</div>
+              </div>
+              <div class="validation-rule">
+                <div class="rule-icon">
+                  <ion-icon name="checkmark-outline"></ion-icon>
+                </div>
+                <div class="rule-text">Détection des doublons</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </main>
+  </div>
