@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>📊 Statistiques des Produits</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="navigation">
+      <ul>
+        <li><a href="#"><span class="icon"><ion-icon name="storefront-outline"></ion-icon></span><span class="title">Gestion Stock</span></a></li>
+        <li><a href="/admin"><span class="icon"><ion-icon name="home-outline"></ion-icon></span><span class="title">Tableau de bord</span></a></li>
+        <li><a href="/stock"><span class="icon"><ion-icon name="layers-outline"></ion-icon></span><span class="title">Stock</span></a></li>
+        <li><a href="/statistiques" class="hovered"><span class="icon"><ion-icon name="bar-chart-outline"></ion-icon></span><span class="title">Statistiques</span></a></li>
+        <li><a href="/assistant"><span class="icon"><ion-icon name="chatbubbles-outline"></ion-icon></span><span class="title">Assistant IA</span></a></li>
+            <li>
+                    <a href="/prediction">
+                        <span class="icon">
+                            <ion-icon name="trending-up-outline">
+
+                            </ion-icon></span>
+                            <span class="title">Prédiction</span>
+                        </a>
+                    </li>
+        <li><a href="/alertes"><span class="icon"><ion-icon name="warning-outline"></ion-icon></span><span class="title">Alertes {% if alert_count is defined and alert_count > 0 %}({{ alert_count }}){% endif %}</span></a></li>
+        <li><a href="/admin/ajouter"><span class="icon"><ion-icon name="add-circle-outline"></ion-icon></span><span class="title">Ajouter Produit</span></a></li>
+        <li><a href="/logout"><span class="icon"><ion-icon name="log-out-outline"></ion-icon></span><span class="title">Déconnexion</span></a></li>
+      </ul>
+    </div>
+    <div class="main">
+      <h1 class="title">📊 Statistiques des Produits</h1>
+      <div class="kpi-wrapper">
+        <div class="kpi-card"><h4>Produits</h4><p>{{ kpis.total_produits }}</p></div>
+        <div class="kpi-card"><h4>Quantité totale</h4><p>{{ kpis.stock_total }}</p></div>
+        <div class="kpi-card"><h4>Prix Moyen</h4><p>{{ kpis.prix_moyen_vente | round(2) }} MAD</p></div>
+        <div class="kpi-card"><h4>Rupture</h4><p>{{ kpis.produits_en_rupture }}</p></div>
+      </div>
+      <div class="grid">
+        <div class="chart-box"><h3>Top 10 Produits les Plus Stockés</h3><canvas id="stockChart"></canvas></div>
+        <div class="chart-box"><h3>Top 10 Produits les Plus Chers</h3><canvas id="expensiveChart"></canvas></div>
+        <div class="chart-box"><h3>Top 10 par Valeur Totale</h3><canvas id="stockValueChart"></canvas></div>
+        <div class="chart-box wide"><h3>Évolution du Stock dans le Temps</h3><canvas id="lineChart"></canvas></div>
+        <div class="chart-box"><h3>Par Département</h3><canvas id="pieChart"></canvas></div>
+        <div class="chart-box"><h3>Par Section</h3><canvas id="sectionPieChart"></canvas></div>
+        <div class="chart-box wide">
+          <h3>Produits par Département (filtrable)</h3>
+          <select id="deptSelect"></select>
+          <canvas id="deptChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const stock_labels = {{ stock_labels | tojson }};
+    const stock_values = {{ stock_values | tojson }};
+    const expensive_labels = {{ expensive_labels | tojson }};
+    const expensive_values = {{ expensive_values | tojson }};
+    const stock_dates = {{ stock_dates | tojson }};
+    const stock_time_values = {{ stock_time_values | tojson }};
+    const department_labels = {{ department_labels | tojson }};
+    const department_values = {{ department_values | tojson }};
+    const section_labels = {{ section_labels | tojson }};
+    const section_values = {{ section_values | tojson }};
+    const stock_value_labels = {{ stock_value_labels | tojson }};
+    const stock_value_values = {{ stock_value_values | tojson }};
+    const departement_data = {{ departement_data | tojson }};
+  </script>
+  <script src="{{ url_for('static', filename='js/dashboard_charts.js') }}"></script>
+</body>
+</html>
