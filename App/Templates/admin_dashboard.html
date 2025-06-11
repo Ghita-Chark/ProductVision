@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration des Produits</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
+</head>
+
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <div class="navigation">
+            <ul>
+                <li>
+                    <a href="#">
+                        <span class="icon">
+                            <ion-icon name="storefront-outline"></ion-icon>
+                        </span>
+                        <span class="title">Gestion Stock</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/admin" class="hovered">
+                        <span class="icon">
+                            <ion-icon name="home-outline"></ion-icon>
+                        </span>
+                        <span class="title">Tableau de bord</span>
+                    </a>
+                </li>
+
+                
+
+                <li>
+                    <a href="/stock">
+                        <span class="icon">
+                            <ion-icon name="layers-outline"></ion-icon>
+                        </span>
+                        <span class="title">Stock</span>
+                    </a>
+                </li>
+
+
+                
+
+                <li><a href="/statistiques"><span class="icon"><ion-icon name="bar-chart-outline"></ion-icon></span><span class="title">Statistiques</span></a></li>
+                
+                <li><a href="/assistant" class="hovered">
+  <span class="icon"><ion-icon name="chatbubbles-outline"></ion-icon></span>
+  <span class="title">Assistant IA</span>
+</a></li>
+                <li>
+                    <a href="/prediction">
+                        <span class="icon">
+                            <ion-icon name="trending-up-outline">
+
+                            </ion-icon></span>
+                            <span class="title">Prédiction</span>
+                        </a>
+                    </li>
+
+
+                <li>
+                    <a href="/alertes" class="{% if request.path == '/alertes' %}hovered{% endif %}">
+                    <span class="icon"><ion-icon name="warning-outline"></ion-icon></span>
+                    <span class="title">Alertes {% if alert_count is defined and alert_count > 0 %}({{ alert_count }}){% endif %}</span>
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="/admin/ajouter">
+                        <span class="icon">
+                            <ion-icon name="add-circle-outline"></ion-icon>
+                        </span>
+                        <span class="title">Ajouter Produit</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/logout">
+                        <span class="icon">
+                            <ion-icon name="log-out-outline"></ion-icon>
+                        </span>
+                        <span class="title">Déconnexion</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main">
+            <div class="topbar">
+                <div class="toggle">
+                    <ion-icon name="menu-outline"></ion-icon>
+                </div>
+
+                <div class="search">
+                    <label>
+                        <input type="text" id="searchInput" placeholder="Rechercher un produit...">
+                        <ion-icon name="search-outline"></ion-icon>
+                    </label>
+                </div>
+
+                <div class="user">
+                    <img src="{{ url_for('static', filename='img/avatar.jpg') }}" alt="Admin">
+                </div>
+            </div>
+
+            <!-- KPI Cards -->
+            <div class="cardBox">
+                <div class="card">
+                    <div>
+                        <div class="numbers">{{ kpis.total_produits }}</div>
+                        <div class="cardName">Total Produits</div>
+                    </div>
+                    <div class="iconBx">
+                        <ion-icon name="cube-outline"></ion-icon>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div>
+                        <div class="numbers">{{ kpis.stock_total }}</div>
+                        <div class="cardName">Total des Ventes</div>
+                    </div>
+                    <div class="iconBx">
+                        <ion-icon name="layers-outline"></ion-icon>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div>
+                        <div class="numbers">{{ kpis.prix_moyen_vente | round(2) }}</div>
+                        <div class="cardName">Prix Moyen (MAD)</div>
+                    </div>
+                    <div class="iconBx">
+                        <ion-icon name="cash-outline"></ion-icon>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div>
+                        <div class="numbers">{{ kpis.produits_en_rupture }}</div>
+                        <div class="cardName">Produits en Rupture</div>
+                    </div>
+                    <div class="iconBx">
+                        <ion-icon name="alert-circle-outline"></ion-icon>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div style="text-align: right; margin: 10px 0;">
+                <button class="btn" onclick="exporterPDF()">📄 Exporter en PDF</button>
+            </div>
+
+            <!-- Produits Tab -->
+            <table id="productsTable" class="table-produits">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Prix achat (Moy.)</th>
+                        <th>Prix vente (Moy.)</th>
+                        <th>Quantité totale</th>
+                        <th>Dernière date</th>
+                    </tr>
+                </thead>
+            <tbody>
+                        {% for p in produits %}
+                     <tr>
+                        <td>{{ p.item_description }}</td>
+                        <td>{{ p.purchase_price }}</td>
+                        <td>{{ p.selling_price }}</td>
+                        <td>{{ p.quantity }}</td>
+                        <td>{{ p.from_date }}</td>
+                     </tr>
+                            {% endfor %}
+             </tbody>
+        </table>
+
+            <!-- Statistiques Tab -->
+            <div id="statsTab" class="tab-content">
+                <div class="details">
+                    <div class="recentOrders">
+                        <div class="cardHeader">
+                            <h2>Statistiques Générales</h2>
+                        </div>
+
+                        <div class="kpi-cards">
+                            <div class="kpi-card">
+                                <h4>Produit le Plus Cher</h4>
+                                <p>{{ kpis.produit_plus_cher }}</p>
+                            </div>
+                            <div class="kpi-card">
+                                <h4>Produit le Moins Cher</h4>
+                                <p>{{ kpis.produit_moins_cher }}</p>
+                            </div>
+                            <div class="kpi-card">
+                                <h4>Rupture de Stock</h4>
+                                <p>{{ kpis.produits_en_rupture }}</p>
+                            </div>
+                        </div>
+
+                        <div class="chart-container">
+                            <h3>Top 10 Produits les Plus Stockés</h3>
+                            <canvas id="chartStock" height="100"></canvas>
+                        </div>
+
+                        <div class="chart-container">
+                            <h3>Top 10 Produits les Plus Chers</h3>
+                            <canvas id="chartExpensive" height="100"></canvas>
+                        </div>
+
+                        <div class="chart-container">
+                            <h3>Évolution du Stock dans le Temps</h3>
+                            <canvas id="chartStockTime" height="100"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="recentOrders">
+                        <div class="cardHeader">
+                            <h2>Répartition des Produits</h2>
+                        </div>
+
+                        <div class="chart-container">
+                            <h3>Par Département</h3>
+                            <canvas id="chartDept" height="200"></canvas>
+                        </div>
+
+                        <div class="chart-container">
+                            <h3>Par Section</h3>
+                            <canvas id="chartSection" height="200"></canvas>
+                        </div>
+
+                        <div class="chart-container">
+                            <h3>Par Valeur Totale</h3>
+                            <canvas id="chartStockValue" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Onglet Assistant IA - Full Width -->
+            <div id="assistantTab" class="tab-content" style="padding: 0; margin: 0;">
+                <iframe src="/chat-admin" style="width: 100%; height: 100vh; border: none;"></iframe>
+            </div>
+
+
+
+            <!-- Alertes Tab -->
+            <div id="alertesTab" class="tab-content">
+                <div class="details">
+                    <div class="recentOrders">
+                        <div class="cardHeader">
+                            <h2>Produits en Alerte (quantité ≤ 10)</h2>
+                        </div>
+
+                        {% if produits_alertes %}
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <td>Nom</td>
+                                        <td>Quantité</td>
+                                        <td>État</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for produit in produits_alertes %}
+                                    <tr>
+                                        <td>{{ produit['item_description'] }}</td>
+                                        <td>{{ produit['quantity'] }}</td>
+                                        <td>
+                                            {% if produit['quantity'] <= 0 %}
+                                                <span class="status rupture">Rupture</span>
+                                            {% else %}
+                                                <span class="status faible">Faible</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <p>Aucune alerte à afficher.</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="recentOrders">
+                        <div class="cardHeader">
+                            <h2>Historique des actions</h2>
+                            <a href="/export/historique" class="btn">Exporter</a>
+                        </div>
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <td>Date</td>
+                                    <td>Action</td>
+                                    <td>Produit</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for action in historique %}
+                                <tr>
+                                    <td>{{ action['timestamp'] }}</td>
+                                    <td>{{ action['action_type']|capitalize }}</td>
+                                    <td>{{ action['product_name'] }}</td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="3">Aucune action enregistrée.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+
+
+    <!-- Scripts -->
+     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+    <script>
+        document.getElementById('searchInput').addEventListener('input', function () {
+            const value = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#productsTable tbody tr');
+
+            rows.forEach(row => {
+                const name = row.querySelector('td')?.innerText.toLowerCase() || '';
+                row.style.display = name.includes(value) ? '' : 'none';
+            });
+        });
+
+        function exportToPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.autoTable({ html: '#productsTable' });
+            doc.save('liste_produits.pdf');
+        }
+    </script>
+
+
+    <!-- Chart.js Scripts -->
+    <script>
+        new Chart(document.getElementById('chartStock'), {
+            type: 'bar',
+            data: {
+                labels: {{ stock_labels|tojson }},
+                datasets: [{
+                    label: 'Quantité en stock',
+                    data: {{ stock_values|tojson }},
+                    backgroundColor: 'rgba(42, 33, 133, 0.6)',
+                    borderColor: 'rgba(42, 33, 133, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    
+        new Chart(document.getElementById('chartExpensive'), {
+            type: 'bar',
+            data: {
+                labels: {{ expensive_labels|tojson }},
+                datasets: [{
+                    label: 'Prix de vente (MAD)',
+                    data: {{ expensive_values|tojson }},
+                    backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    
+        new Chart(document.getElementById('chartStockTime'), {
+            type: 'line',
+            data: {
+                labels: {{ stock_dates|tojson }},
+                datasets: [{
+                    label: 'Quantité totale',
+                    data: {{ stock_time_values|tojson }},
+                    borderColor: 'rgba(42, 33, 133, 1)',
+                    backgroundColor: 'rgba(42, 33, 133, 0.2)',
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    
+        new Chart(document.getElementById('chartDept'), {
+            type: 'pie',
+            data: {
+                labels: {{ department_labels|tojson }},
+                datasets: [{
+                    data: {{ department_values|tojson }},
+                    backgroundColor: [
+                        '#2a2185', '#f39c12', '#3498db', '#2ecc71', '#e74c3c',
+                        '#9b59b6', '#1abc9c', '#f1c40f', '#34495e', '#e67e22'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+    
+        new Chart(document.getElementById('chartSection'), {
+            type: 'doughnut',
+            data: {
+                labels: {{ section_labels|tojson }},
+                datasets: [{
+                    data: {{ section_values|tojson }},
+                    backgroundColor: [
+                        '#2a2185', '#f39c12', '#3498db', '#2ecc71', '#e74c3c',
+                        '#9b59b6', '#1abc9c', '#f1c40f', '#34495e', '#e67e22'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+    
+        new Chart(document.getElementById('chartStockValue'), {
+            type: 'bar',
+            data: {
+                labels: {{ stock_value_labels|tojson }},
+                datasets: [{
+                    label: 'Valeur totale (MAD)',
+                    data: {{ stock_value_values|tojson }},
+                    backgroundColor: 'rgba(46, 204, 113, 0.6)',
+                    borderColor: 'rgba(46, 204, 113, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    </script>
+    <script>
+  function exporterPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    doc.autoTable({ 
+      html: '#productsTable',
+      styles: { fontSize: 8 },
+      headStyles: { fillColor: [42, 33, 133] },
+      margin: { top: 10 }
+    });
+
+    doc.save("produits.pdf");
+  }
+</script>
+
+</body>
+</html>
