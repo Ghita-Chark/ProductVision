@@ -1,0 +1,207 @@
+/* ========== FONTS ========== */
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Ubuntu', sans-serif;
+}
+
+:root {
+  --gradient-data: linear-gradient(135deg, #3b82f6, #06b6d4);
+  --white: #fff;
+  --gray: #f5f5f5;
+  --black1: #222;
+  --black2: #999;
+}
+
+/* ========== CONTAINER ========== */
+.container {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--gray);
+}
+
+/* ========== NAVIGATION ========== */
+.navigation {
+  width: 250px;
+  background: var(--gradient-data);
+  color: white;
+  height: 100vh;
+  padding: 30px 0;
+  position: fixed;
+}
+
+.navigation ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.navigation ul li {
+  margin: 20px 0;
+}
+
+.navigation ul li a {
+  display: flex;
+  align-items: center;
+  color: white;
+  text-decoration: none;
+  padding: 12px 20px;
+  transition: 0.3s;
+}
+
+.navigation ul li a:hover,
+.navigation ul li a.active {
+  background: #fff;
+  color: #06b6d4;
+  border-radius: 10px 0 0 10px;
+}
+
+.navigation ul li a .icon {
+  margin-right: 10px;
+  font-size: 20px;
+}
+
+/* ========== MAIN ========== */
+.main {
+  margin-left: 250px;
+  flex: 1;
+  padding: 30px;
+  background-color: var(--gray);
+}
+
+/* ========== TOPBAR ========== */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.search input {
+  padding: 10px 15px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  outline: none;
+  width: 300px;
+  padding-left: 40px;
+  font-size: 14px;
+}
+
+.search ion-icon {
+  position: relative;
+  left: -270px;
+  top: 2px;
+  font-size: 18px;
+  color: #999;
+}
+
+.user img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+/* ========== TABLE ========== */
+.recentOrders {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.cardHeader h2 {
+  color: #333;
+}
+
+.cardHeader .btn {
+  background: #06b6d4;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 20px;
+  text-decoration: none;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table thead {
+  background-color: #3b82f6;
+  color: white;
+}
+
+table th,
+table td {
+  padding: 12px 15px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+}
+
+table tbody tr:hover {
+  background-color: #f1f5f9;
+}
+
+/* ========== STATUS ========== */
+.status {
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: bold;
+  color: white;
+  display: inline-block;
+}
+
+.status.disponible {
+  background-color: #16a34a;
+}
+
+.status.faible {
+  background-color: #eab308;
+}
+
+.status.rupture {
+  background-color: #dc2626;
+}
+
+.btn-export {
+  padding: 8px 16px;
+  background-color: #2a2185;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.btn-export:hover {
+  background-color: #1c1660;
+}
+
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .navigation {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+  .main {
+    margin-left: 0;
+    padding: 20px;
+  }
+  .search input {
+    width: 100%;
+  }
+}
