@@ -1,0 +1,575 @@
+/* =========== Google Fonts =========== */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* =========== Variables =========== */
+:root {
+    --primary-color: #4f46e5;
+    --primary-light: #818cf8;
+    --primary-dark: #3730a3;
+    --secondary-color: #0f172a;
+    --secondary-light: #1e293b;
+    --text-color: #334155;
+    --text-light: #64748b;
+    --white: #ffffff;
+    --light-bg: #f8fafc;
+    --card-bg: #ffffff;
+    --border-color: #e2e8f0;
+    --success-color: #10b981;
+    --warning-color: #f59e0b;
+    --danger-color: #ef4444;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --transition: all 0.3s ease;
+    --border-radius: 0.5rem;
+}
+
+/* =========== Base =========== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    overflow-x: hidden;
+    background-color: var(--light-bg);
+}
+
+.container {
+    position: relative;
+    width: 100%;
+}
+
+/* =========== Navigation =========== */
+.navigation {
+    position: fixed;
+    width: 300px;
+    height: 100%;
+    background: var(--secondary-color);
+    border-left: 10px solid var(--secondary-color);
+    transition: 0.5s;
+    overflow: hidden;
+    z-index: 1000;
+}
+
+.navigation.active {
+    width: 80px;
+}
+
+.navigation ul {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding-top: 20px;
+}
+
+.navigation ul li {
+    position: relative;
+    width: 100%;
+    list-style: none;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+}
+
+.navigation ul li:hover,
+.navigation ul li.hovered {
+    background: var(--white);
+}
+
+.navigation ul li:nth-child(1) {
+    margin-bottom: 40px;
+    pointer-events: none;
+}
+
+.navigation ul li a {
+    position: relative;
+    display: block;
+    width: 100%;
+    display: flex;
+    text-decoration: none;
+    color: var(--white);
+}
+
+.navigation ul li:hover a,
+.navigation ul li.hovered a {
+    color: var(--secondary-color);
+}
+
+.navigation ul li a .icon {
+    position: relative;
+    display: block;
+    min-width: 60px;
+    height: 60px;
+    line-height: 70px;
+    text-align: center;
+}
+
+.navigation ul li a .icon ion-icon {
+    font-size: 1.75rem;
+}
+
+.navigation ul li a .title {
+    position: relative;
+    display: block;
+    padding: 0 10px;
+    height: 60px;
+    line-height: 60px;
+    text-align: start;
+    white-space: nowrap;
+}
+
+/* =========== Navigation Curve =========== */
+.navigation ul li:hover a::before,
+.navigation ul li.hovered a::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: -50px;
+    width: 50px;
+    height: 50px;
+    background: transparent;
+    border-radius: 50%;
+    box-shadow: 35px 35px 0 10px var(--white);
+    pointer-events: none;
+}
+
+.navigation ul li:hover a::after,
+.navigation ul li.hovered a::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: -50px;
+    width: 50px;
+    height: 50px;
+    background: transparent;
+    border-radius: 50%;
+    box-shadow: 35px -35px 0 10px var(--white);
+    pointer-events: none;
+}
+
+/* =========== Main =========== */
+.main {
+    position: absolute;
+    width: calc(100% - 300px);
+    left: 300px;
+    min-height: 100vh;
+    background: var(--light-bg);
+    transition: 0.5s;
+}
+
+.main.active {
+    width: calc(100% - 80px);
+    left: 80px;
+}
+
+/* =========== Topbar =========== */
+.topbar {
+    width: 100%;
+    height: 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    background: var(--card-bg);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 30px;
+}
+
+.toggle {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    cursor: pointer;
+    color: var(--text-color);
+    background: var(--light-bg);
+    border-radius: 50%;
+    transition: var(--transition);
+}
+
+.toggle:hover {
+    background: var(--primary-light);
+    color: var(--white);
+}
+
+.search {
+    position: relative;
+    width: 400px;
+    margin: 0 10px;
+}
+
+.search label {
+    position: relative;
+    width: 100%;
+}
+
+.search label input {
+    width: 100%;
+    height: 50px;
+    border-radius: 25px;
+    padding: 5px 20px 5px 45px;
+    font-size: 1rem;
+    outline: none;
+    border: 1px solid var(--border-color);
+    background: var(--light-bg);
+    color: var(--text-color);
+    transition: var(--transition);
+}
+
+.search label input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+}
+
+.search label ion-icon {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    color: var(--text-light);
+}
+
+/* =========== KPI Cards =========== */
+.cardBox {
+    position: relative;
+    width: 100%;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 30px;
+    margin-bottom: 30px;
+}
+
+.cardBox .card {
+    position: relative;
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: var(--border-radius);
+    display: flex;
+    justify-content: space-between;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    overflow: hidden;
+}
+
+.cardBox .card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+
+.cardBox .card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: var(--primary-color);
+}
+
+.cardBox .card:nth-child(2)::before {
+    background: var(--success-color);
+}
+
+.cardBox .card:nth-child(3)::before {
+    background: var(--warning-color);
+}
+
+.cardBox .card:nth-child(4)::before {
+    background: var(--danger-color);
+}
+
+.cardBox .card .numbers {
+    position: relative;
+    font-weight: 700;
+    font-size: 2.5rem;
+    color: var(--primary-color);
+}
+
+.cardBox .card:nth-child(2) .numbers {
+    color: var(--success-color);
+}
+
+.cardBox .card:nth-child(3) .numbers {
+    color: var(--warning-color);
+}
+
+.cardBox .card:nth-child(4) .numbers {
+    color: var(--danger-color);
+}
+
+.cardBox .card .cardName {
+    color: var(--text-light);
+    font-size: 1.1rem;
+    margin-top: 5px;
+}
+
+.cardBox .card .iconBx {
+    font-size: 3rem;
+    color: var(--text-light);
+    opacity: 0.2;
+}
+
+/* =========== Recent Orders =========== */
+.details {
+    position: relative;
+    width: 100%;
+    padding: 0 20px 20px;
+}
+
+.details .recentOrders {
+    position: relative;
+    min-height: 530px;
+    background: var(--card-bg);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    border-radius: var(--border-radius);
+}
+
+.details .cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.cardHeader h2 {
+    font-weight: 600;
+    color: var(--secondary-color);
+    position: relative;
+    padding-left: 15px;
+}
+
+.cardHeader h2::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 5px;
+    height: 25px;
+    background: var(--primary-color);
+    border-radius: 2px;
+}
+
+/* =========== Table Styles =========== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+table thead td {
+    font-weight: 600;
+    color: var(--text-color);
+    background: var(--light-bg);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+table tr {
+    border-bottom: 1px solid var(--border-color);
+    transition: var(--transition);
+}
+
+table tbody tr:hover {
+    background: rgba(79, 70, 229, 0.05);
+}
+
+table tr td {
+    padding: 12px 10px;
+    font-size: 0.95rem;
+    color: var(--text-color);
+}
+
+/* Status Styles */
+.status {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-left: 8px;
+    white-space: nowrap;
+}
+
+.status.disponible {
+    background: rgba(16, 185, 129, 0.2);
+    color: var(--success-color);
+}
+
+.status.faible {
+    background: rgba(245, 158, 11, 0.2);
+    color: var(--warning-color);
+}
+
+.status.rupture {
+    background: rgba(239, 68, 68, 0.2);
+    color: var(--danger-color);
+}
+
+/* =========== Responsive Design =========== */
+@media (max-width: 1200px) {
+    .cardBox {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 991px) {
+    .navigation {
+        left: -300px;
+    }
+    .navigation.active {
+        width: 300px;
+        left: 0;
+    }
+    .main {
+        width: 100%;
+        left: 0;
+    }
+    .main.active {
+        left: 300px;
+    }
+    .search {
+        width: 300px;
+    }
+}
+
+@media (max-width: 768px) {
+    .cardBox {
+        grid-template-columns: repeat(1, 1fr);
+    }
+    .search {
+        width: 100%;
+        margin: 10px 0;
+    }
+    .details {
+        padding: 0 10px 10px;
+    }
+    .topbar {
+        padding: 0 10px;
+        height: auto;
+        flex-direction: column;
+        align-items: flex-start;
+        padding-bottom: 10px;
+    }
+    .toggle {
+        margin-bottom: 10px;
+    }
+    table {
+        width: 900px;
+    }
+    .recentOrders {
+        overflow-x: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .cardBox .card {
+        padding: 20px;
+    }
+    .cardBox .card .numbers {
+        font-size: 2rem;
+    }
+    .cardHeader h2 {
+        font-size: 1.2rem;
+    }
+}
+
+/* =========== Scrollbar Styles =========== */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--light-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-light);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-color);
+}
+
+/* =========== Animations =========== */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.cardBox .card {
+    animation: fadeIn 0.5s ease forwards;
+    animation-delay: calc(0.1s * var(--i, 0));
+    opacity: 0;
+}
+
+/* =========== Table Enhancements =========== */
+.recentOrders {
+    position: relative;
+    overflow: hidden;
+}
+
+.recentOrders::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 20px;
+    background: linear-gradient(to top, var(--card-bg), transparent);
+    z-index: 5;
+    pointer-events: none;
+}
+
+.recentOrders::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 20px;
+    height: 100%;
+    background: linear-gradient(to left, var(--card-bg), transparent);
+    z-index: 5;
+    pointer-events: none;
+}
+
+/* =========== Empty State =========== */
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-light);
+}
+
+.empty-state ion-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    color: var(--primary-light);
+}
+
+.empty-state h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: var(--text-color);
+}
+
+/* =========== Hover Effects =========== */
+.toggle:active {
+    transform: scale(0.95);
+}
+
+.search label input:focus + ion-icon {
+    color: var(--primary-color);
+}
