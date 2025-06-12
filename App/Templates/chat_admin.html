@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Assistant IA - Dashboard Analytics</title>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Ionicons -->
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/chat_admin.css') }}" />
+</head>
+<body>
+  <div class="container">
+    <!-- Navigation latérale -->
+    <div class="navigation">
+      <ul>
+        <li><a href="#"><span class="icon"><ion-icon name="storefront-outline"></ion-icon></span><span class="title">Gestion Stock</span></a></li>
+        <li><a href="/admin"><span class="icon"><ion-icon name="home-outline"></ion-icon></span><span class="title">Tableau de bord</span></a></li>
+        <li><a href="/stock"><span class="icon"><ion-icon name="layers-outline"></ion-icon></span><span class="title">Stock</span></a></li>
+        <li><a href="/statistiques"><span class="icon"><ion-icon name="bar-chart-outline"></ion-icon></span><span class="title">Statistiques</span></a></li>
+        
+        <li><a href="/assistant" class="hovered"><span class="icon"><ion-icon name="chatbubbles-outline"></ion-icon></span><span class="title">Assistant IA</span></a></li>
+        <li><a href="/prediction"><span class="icon"><ion-icon name="trending-up-outline"></ion-icon></span><span class="title">Prédiction</span></a></li>
+        <li>
+                    <a href="/alertes" class="{% if request.path == '/alertes' %}hovered{% endif %}">
+                    <span class="icon"><ion-icon name="warning-outline"></ion-icon></span>
+                    <span class="title">Alertes {% if alert_count is defined and alert_count > 0 %}({{ alert_count }}){% endif %}</span>
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="/admin/ajouter">
+                        <span class="icon">
+                            <ion-icon name="add-circle-outline"></ion-icon>
+                        </span>
+                        <span class="title">Ajouter Produit</span>
+                    </a>
+                </li>
+        <li><a href="/logout"><span class="icon"><ion-icon name="log-out-outline"></ion-icon></span><span class="title">Déconnexion</span></a></li>
+      </ul>
+    </div>
+
+    <!-- Contenu principal -->
+    <div class="main">
+      <header class="dashboard-header">
+        <div class="header-content">
+          <div class="logo-section">
+            <div class="ai-avatar"><ion-icon name="analytics-outline"></ion-icon></div>
+            <div class="header-text">
+              <h1>Assistant IA Analytics</h1>
+              <p>Analysez vos données en temps réel avec l'IA</p>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="dashboard-main">
+        <section class="chat-panel">
+          <div id="messages" class="messages">
+            <div class="welcome-message">
+              <div class="ai-icon"><ion-icon name="sparkles-outline"></ion-icon></div>
+              <div class="welcome-text">
+                <h4>Bonjour ! Je suis votre assistant IA</h4>
+                <p>Posez-moi une question pour voir des visualisations et recommandations.</p>
+              </div>
+            </div>
+          </div>
+          <div class="input-section">
+            <div class="input-container">
+              <input type="text" id="question-input" placeholder="Posez une question..." />
+              <button id="send-btn"><ion-icon name="send-outline"></ion-icon></button>
+            </div>
+          </div>
+        </section>
+
+        <section class="analytics-panel">
+          <div class="chart-wrapper">
+            <div class="chart-placeholder">
+              <ion-icon name="analytics-outline"></ion-icon>
+              <p>Graphique en attente</p>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- JS -->
+  <script src="{{ url_for('static', filename='js/chat_admin.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>📢 Alertes - Produits & Historique</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/alertes.css') }}">
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</head>
+<body>
+  <div class="container">
+    <!-- SIDEBAR -->
+    <div class="navigation">
+      <ul>
+        <li><a href="#"><span class="icon"><ion-icon name="storefront-outline"></ion-icon></span><span class="title">Gestion Stock</span></a></li>
+        <li><a href="/admin"><span class="icon"><ion-icon name="home-outline"></ion-icon></span><span class="title">Tableau de bord</span></a></li>
+        <li><a href="/stock"><span class="icon"><ion-icon name="layers-outline"></ion-icon></span><span class="title">Stock</span></a></li>
+        <li><a href="/statistiques"><span class="icon"><ion-icon name="bar-chart-outline"></ion-icon></span><span class="title">Statistiques</span></a></li>
+        <li><a href="/assistant"><span class="icon"><ion-icon name="chatbubbles-outline"></ion-icon></span><span class="title">Assistant IA</span></a></li>
+        <li><a href="/prediction"><span class="icon"><ion-icon name="trending-up-outline"></ion-icon></span><span class="title">Prédiction</span></a></li>
+        
+        <li><a href="/alertes" class="active"><span class="icon"><ion-icon name="warning-outline"></ion-icon></span><span class="title">Alertes</span></a></li>
+        <li>
+                    <a href="/admin/ajouter">
+                        <span class="icon">
+                            <ion-icon name="add-circle-outline"></ion-icon>
+                        </span>
+                        <span class="title">Ajouter Produit</span>
+                    </a>
+                </li>
+        <li><a href="/logout"><span class="icon"><ion-icon name="log-out-outline"></ion-icon></span><span class="title">Déconnexion</span></a></li>
+      </ul>
+    </div>
+
+    <!-- CONTENU PRINCIPAL -->
+    <div class="main">
+      <div class="topbar">
+        <div class="toggle"><ion-icon name="menu-outline"></ion-icon></div>
+        <div class="search">
+          <label>
+            <input type="text" placeholder="Rechercher..." />
+            <ion-icon name="search-outline"></ion-icon>
+          </label>
+        </div>
+        <div class="user">
+          <img src="{{ url_for('static', filename='img/avatar.jpg') }}" alt="admin"/>
+        </div>
+      </div>
+
+      <!-- TITRE -->
+      <h1 class="page-title">🔔 Produits en rupture & Historique</h1>
+
+      <div class="grid">
+        <!-- Produits en rupture -->
+        <div class="box">
+  <h2>🛑 Produits en rupture de stock</h2>
+  {% if alertes %}
+    <ul>
+      {% for nom in alertes %}
+        <li><span class="rupture-nom">🚨 {{ nom }}</span></li>
+
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Aucun produit en rupture actuellement.</p>
+  {% endif %}
+</div>
+
+        <!-- Historique des actions admin -->
+        <div class="box">
+          <h2>📜 Historique des actions admin</h2>
+          {% if actions %}
+          <table>
+            <thead>
+              <tr>
+                <th>Action</th>
+                <th>Produit</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for action in actions %}
+              <tr>
+                <td>{{ action.action_type }}</td>
+                <td>{{ action.product_name }}</td>
+                <td>{{ action.action_date }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% else %}
+            <p>Aucune action enregistrée.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
