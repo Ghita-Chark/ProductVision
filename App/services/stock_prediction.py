@@ -1,6 +1,6 @@
 # app/services/stock_prediction_service.py
 import pandas as pd
-from app.dal.db import get_connection
+from App.dal.db import get_connection
 
 def predict_future_stock(nom_produit):
     conn = get_connection()
