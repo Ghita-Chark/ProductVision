@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 from functools import wraps
-from app.services.auth_services import authenticate_user, register_user
+from App.services.auth_services import authenticate_user, register_user
 
 auth = Blueprint('auth', __name__)
 
